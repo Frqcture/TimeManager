@@ -31,7 +31,7 @@ const events_data = [
     extra_descriptions: ["Einstein"],
   },
   {
-    title: "Physics",
+    title: "Computer Science",
     startTime: genTimeBlock("WED", 11),
     endTime: genTimeBlock("WED", 11, 50),
     location: "Lab 404",
@@ -39,8 +39,8 @@ const events_data = [
   },
   {
     title: "Mandarin",
-    startTime: genTimeBlock("TUE", 9),
-    endTime: genTimeBlock("TUE", 10, 50),
+    startTime: genTimeBlock("WED", 9),
+    endTime: genTimeBlock("WED", 10, 50),
     location: "Language Center",
     extra_descriptions: ["Chen"],
   },
@@ -65,12 +65,28 @@ const events_data = [
   },
 ];
 
+//Write a function to return the current day of the week
+function getDayOfWeek(date) {
+  var dayOfWeek = new Date(date).getDay();
+  return isNaN(dayOfWeek) ? null :
+    ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][dayOfWeek];
+}
+
+//Function to get the current date
+function getCurrentDate(separator=''){
+  let newDate = new Date()
+  let date = newDate.getDate();
+  let month = newDate.getMonth() + 1;
+  let year = newDate.getFullYear();
+  return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
+}
+
 //Make a new empty react component called Timetable
 export default class Timetable extends Component {
   constructor(props) {
     super(props);
-    this.numberOfDays = 5;
-    this.pivotDate = genTimeBlock('mon');
+    this.numberOfDays = 1;
+    this.pivotDate = genTimeBlock(getDayOfWeek(getCurrentDate('-')), 0);
   }
 
   scrollViewRef = (ref) => {
