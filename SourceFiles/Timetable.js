@@ -65,10 +65,11 @@ const events_data = [
   },
 ];
 
-export default class MyTimetable extends Component {
+//Make a new empty react component called Timetable
+export default class Timetable extends Component {
   constructor(props) {
     super(props);
-    this.numOfDays = 5;
+    this.numberOfDays = 5;
     this.pivotDate = genTimeBlock('mon');
   }
 
@@ -76,31 +77,27 @@ export default class MyTimetable extends Component {
     this.timetableRef = ref;
   };
 
-  onEventPress = (evt) => {
-    Alert.alert("onEventPress", JSON.stringify(evt));
-  };
-
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container}>
+        <View style = {styles.container}>
           <TimeTableView
             scrollViewRef={this.scrollViewRef}
             events={events_data}
-            pivotTime={9}
+            pivotTime={8}
             pivotEndTime={20}
             pivotDate={this.pivotDate}
-            nDays={this.numOfDays}
-            onEventPress={this.onEventPress}
-            headerStyle={styles.headerStyle}
-            formatDateHeader="dddd"
-            locale="en"
+            locale = 'en'
+            formatDateHeader = 'ddd'
+            nDays={this.numberOfDays}
+            headerStyle = {styles.headerStyle}
           />
         </View>
       </SafeAreaView>
+      
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   headerStyle: {
