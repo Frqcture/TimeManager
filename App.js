@@ -75,7 +75,7 @@ function AddTimeSlotScreen({ navigation }) {
         type={NewTimeForm}
         options={options}
       />
-      <TouchableHighlight style={styles.button} underlayColor='#99d9f4'>
+      <TouchableHighlight style={styles.button} onPress={() => onButtonPress()} underlayColor='#99d9f4'>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableHighlight>
     </View>
@@ -84,7 +84,10 @@ function AddTimeSlotScreen({ navigation }) {
 
 function onButtonPress() {
   Alert.alert('Time slot added!');
-
+  var value = refs.form.getValue();
+  if (value) { // if validation fails, value will be null
+    console.log(value); // value here is an instance of Person
+  }
 }
 
 const storeData = async (value) => {
