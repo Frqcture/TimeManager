@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { SafeAreaView, View, TextInput } from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, Alert } from 'react-native';
 import Timetable from './SourceFiles/Timetable';
-// import FabButton from './SourceFiles/fab';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
+import { Button } from '@rneui/base';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ function App() {
   );
 }
 
-function FabButton({nav}) {
+function FabButton({ nav }) {
   return (
     <View>
       <FAB
@@ -33,38 +33,55 @@ function FabButton({nav}) {
   );
 }
 
-function CalendarScreen({navigation}) {
+function CalendarScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Timetable />
-      <FabButton nav={navigation}/>
+      <FabButton nav={navigation} />
     </View>
   );
 }
 
-function AddTimeSlotScreen({navigation}) {
+function AddTimeSlotScreen({ navigation }) {
   return (
     <SafeAreaView>
       <TextInput
-        value={String}
+        style={styles.input}
         placeholder="Title"
       />
       <TextInput
-        value={String}
+        style={styles.input}
         placeholder="Location"
       />
       <TextInput
-        value={Number}
+        style={styles.input}
         placeholder="Start Time"
         keyboardType="numeric"
       />
       <TextInput
-        value={Number}
+        style={styles.input}
         placeholder="End Time"
         keyboardType="numeric"
       />
+      <Button
+        title="Add"
+        onPress={() => onButtonPress()}
+      />
     </SafeAreaView>
   );
-  } 
+}
+
+function onButtonPress() {
+  Alert.alert('Time slot added!');
+}
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});
 
 export default App;
