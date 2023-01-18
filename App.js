@@ -7,32 +7,9 @@ import { FAB } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-var t = require('tcomb-form-native');
+var r = require('react-native');
 
 const Stack = createNativeStackNavigator();
-var Form = t.form.Form;
-
-const form = "form "
-
-const NewTimeForm = t.struct({
-  title: t.String,
-  location: t.String,
-  startTime: t.Date,
-  endTime: t.Date,
-});
-
-var options = {
-  fields: {
-    startTime: {
-      mode: 'time',
-      defaultValueText: 'Start Time'
-    },
-    endTime: {
-      mode: 'time' ,
-      defaultValueText: 'End Time'
-    }
-  }
-};
 
 function App() {
   return (
@@ -68,12 +45,29 @@ function CalendarScreen({ navigation }) {
   );
 }
 
+var Title, Location, Start, End = '';
+
 function AddTimeSlotScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Form
-        type={NewTimeForm}
-        options={options}
+      <TextInput
+        style={styles.containerText}
+        placeholder='Title'
+        selectedValue={Title}
+      />
+      <TextInput
+        placeholder='Location'
+        selectedValue={Location}
+      />
+      <TextInput
+        placeholder='Start Time'
+        selectedValue={Start}
+        keyboardType='numeric'
+      />
+      <TextInput
+        placeholder='End Time'
+        selectedValue={End}
+        keyboardType='numeric'
       />
       <TouchableHighlight style={styles.button} onPress={() => onButtonPress()} underlayColor='#99d9f4'>
         <Text style={styles.buttonText}>Save</Text>
@@ -81,6 +75,7 @@ function AddTimeSlotScreen({ navigation }) {
     </View>
   );
 }
+
 
 function onButtonPress() {
   Alert.alert('Time slot added!');
@@ -114,6 +109,12 @@ var styles = StyleSheet.create({
     marginTop: 50,
     padding: 20,
     backgroundColor: '#ffffff',
+  },
+  containerText: {
+    justifyContent: 'center',
+    height: 30,
+    margin: 12,
+    borderWidth: 1,
   },
   buttonText: {
     fontSize: 18,
