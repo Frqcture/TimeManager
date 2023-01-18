@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, View, TextInput, Alert } from 'react-native';
+import { StyleSheet, SafeAreaView, View, TextInput, Alert, TouchableHighlight, Text } from 'react-native';
 import Timetable from './SourceFiles/Timetable';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,7 +7,32 @@ import { FAB } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+var t = require('tcomb-form-native');
+
 const Stack = createNativeStackNavigator();
+var Form = t.form.Form;
+
+const form = "form "
+
+const NewTimeForm = t.struct({
+  title: t.String,
+  location: t.String,
+  startTime: t.Date,
+  endTime: t.Date,
+});
+
+var options = {
+  fields: {
+    startTime: {
+      mode: 'time',
+      defaultValueText: 'Start Time'
+    },
+    endTime: {
+      mode: 'time' ,
+      defaultValueText: 'End Time'
+    }
+  }
+};
 
 function App() {
   return (
@@ -45,36 +70,18 @@ function CalendarScreen({ navigation }) {
 
 function AddTimeSlotScreen({ navigation }) {
   return (
-    <SafeAreaView>
-      <TextInput
-        style={styles.input}
-        placeholder="Title"
+    <View style={styles.input}>
+      <Form
+        type={NewTimeForm}
+        options={options}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Location"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Start Time"
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="End Time"
-        keyboardType="numeric"
-      />
-      <Button
-        title="Add"
-        onPress={() => onButtonPress()}
-      />
-    </SafeAreaView>
+    </View>
   );
 }
 
 function onButtonPress() {
   Alert.alert('Time slot added!');
-  storeData("data")
+
 }
 
 const storeData = async (value) => {
@@ -85,7 +92,6 @@ const storeData = async (value) => {
     // saving error
   }
 }
-
 
 const getData = async () => {
   try {
@@ -100,7 +106,6 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     margin: 12,
-    borderWidth: 1,
     padding: 10,
   },
 });
