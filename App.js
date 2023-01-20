@@ -56,15 +56,18 @@ function AddTimeSlotScreen({ navigation }) {
         selectedValue={Title}
       />
       <TextInput
+        style={styles.containerText}
         placeholder='Location'
         selectedValue={Location}
       />
       <TextInput
+        style={styles.containerText}
         placeholder='Start Time'
         selectedValue={Start}
         keyboardType='numeric'
       />
       <TextInput
+        style={styles.containerText}
         placeholder='End Time'
         selectedValue={End}
         keyboardType='numeric'
@@ -111,6 +114,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   containerText: {
+    paddingLeft: 5,
     justifyContent: 'center',
     height: 30,
     margin: 12,
