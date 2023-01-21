@@ -1,4 +1,5 @@
-import * as React from 'react';
+// import * as React from 'react';
+import {useState} from 'react';
 import { StyleSheet, SafeAreaView, View, TextInput, Alert, TouchableHighlight, Text } from 'react-native';
 import Timetable from './SourceFiles/Timetable';
 import { NavigationContainer } from '@react-navigation/native';
@@ -45,34 +46,38 @@ function CalendarScreen({ navigation }) {
   );
 }
 
-var Title, Location, Start, End = '';
-
 function AddTimeSlotScreen({ navigation }) {
+  const [Title, setText] = useState('');
+  const [Location, Start, End] = useState('');
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.containerText}
         placeholder='Title'
-        selectedValue={Title}
+        onChangeText={Title => setText(Title)}
+        defaultValue={Title}
       />
       <TextInput
         style={styles.containerText}
         placeholder='Location'
-        selectedValue={Location}
+        defaultValue={Location}
+        onChangeText={Location => setText(Location)}
       />
       <TextInput
         style={styles.containerText}
         placeholder='Start Time'
-        selectedValue={Start}
+        defaultValue={Start}
+        onChangeText={Start => setText(Start)}
         keyboardType='numeric'
       />
       <TextInput
         style={styles.containerText}
         placeholder='End Time'
-        selectedValue={End}
+        defaultValue={End}
+        onChangeText={End => setText(End)}
         keyboardType='numeric'
       />
-      <TouchableHighlight style={styles.button} onPress={() => onButtonPress()} underlayColor='#99d9f4'>
+      <TouchableHighlight style={styles.button} onPress={() => Alert.alert(Location)} underlayColor='#99d9f4'>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableHighlight>
     </View>
@@ -81,11 +86,8 @@ function AddTimeSlotScreen({ navigation }) {
 
 
 function onButtonPress() {
-  Alert.alert('Time slot added!');
-  var value = refs.form.getValue();
-  if (value) { // if validation fails, value will be null
-    console.log(value); // value here is an instance of Person
-  }
+  Alert.alert({Title});
+  
 }
 
 const storeData = async (value) => {
