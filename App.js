@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useForm} from "react-hook-form"
 
 var r = require('react-native');
 
@@ -49,9 +50,11 @@ function CalendarScreen({ navigation }) {
 function AddTimeSlotScreen({ navigation }) {
   const [Title, setText] = useState('');
   const [Location, Start, End] = useState('');
+  const {register,handleSubmit} = useForm();
+  const onSubmit = data => console.log(data);
   return (
     <View style={styles.container}>
-      <TextInput
+      {/* <TextInput
         style={styles.containerText}
         placeholder='Title'
         onChangeText={Title => setText(Title)}
@@ -79,10 +82,15 @@ function AddTimeSlotScreen({ navigation }) {
       />
       <TouchableHighlight style={styles.button} onPress={() => Alert.alert(Location)} underlayColor='#99d9f4'>
         <Text style={styles.buttonText}>Save</Text>
-      </TouchableHighlight>
+      </TouchableHighlight> */}
+      <form onSubmit={handleSubmit(onSubmit)}> 
+        <input {...register("Title")} placeholder="Title" />
+      </form>
     </View>
   );
 }
+
+
 
 
 function onButtonPress() {
