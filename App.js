@@ -54,35 +54,6 @@ function AddTimeSlotScreen({ navigation }) {
   const onSubmit = data => console.log(data);
   return (
     <View style={styles.container}>
-      {/* <TextInput
-        style={styles.containerText}
-        placeholder='Title'
-        onChangeText={Title => setText(Title)}
-        defaultValue={Title}
-      />
-      <TextInput
-        style={styles.containerText}
-        placeholder='Location'
-        defaultValue={Location}
-        onChangeText={Location => setText(Location)}
-      />
-      <TextInput
-        style={styles.containerText}
-        placeholder='Start Time'
-        defaultValue={Start}
-        onChangeText={Start => setText(Start)}
-        keyboardType='numeric'
-      />
-      <TextInput
-        style={styles.containerText}
-        placeholder='End Time'
-        defaultValue={End}
-        onChangeText={End => setText(End)}
-        keyboardType='numeric'
-      />
-      <TouchableHighlight style={styles.button} onPress={() => Alert.alert(Location)} underlayColor='#99d9f4'>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableHighlight> */}
       <form onSubmit={handleSubmit(onSubmit)}> 
         <input {...register("Title")} placeholder="Title" />
       </form>
