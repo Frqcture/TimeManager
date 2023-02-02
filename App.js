@@ -1,13 +1,13 @@
 // import * as React from 'react';
 import {useState} from 'react';
 import { StyleSheet, SafeAreaView, View, TextInput, Alert, TouchableHighlight, Text } from 'react-native';
-import Timetable from './SourceFiles/Timetable';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from "react-hook-form"
+import Timetable from './SourceFiles/Timetable';
 
 var r = require('react-native');
 

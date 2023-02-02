@@ -3,8 +3,9 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
+  Text
 } from 'react-native';
-import {TimeTableView, genTimeBlock } from 'react-native-timetable';
+import {TimeTableView, genTimeBlock, genDateBlock } from 'react-native-timetable';
 
 
 const events_data = [
@@ -15,54 +16,54 @@ const events_data = [
     location: "Classroom 403",
     extra_descriptions: ["Kim", "Lee"],
   },
-  // {
-  //   title: "Math",
-  //   startTime: genTimeBlock("WED", 9),
-  //   endTime: genTimeBlock("WED", 10, 50),
-  //   location: "Classroom 403",
-  //   extra_descriptions: ["Kim", "Lee"],
-  // },
-  // {
-  //   title: "Physics",
-  //   startTime: genTimeBlock("MON", 11),
-  //   endTime: genTimeBlock("MON", 11, 50),
-  //   location: "Lab 404",
-  //   extra_descriptions: ["Einstein"],
-  // },
-  // {
-  //   title: "Computer Science",
-  //   startTime: genTimeBlock("WED", 11),
-  //   endTime: genTimeBlock("WED", 11, 50),
-  //   location: "Lab 404",
-  //   extra_descriptions: ["Einstein"],
-  // },
-  // {
-  //   title: "Mandarin",
-  //   startTime: genTimeBlock("WED", 9),
-  //   endTime: genTimeBlock("WED", 10, 50),
-  //   location: "Language Center",
-  //   extra_descriptions: ["Chen"],
-  // },
-  // {
-  //   title: "Japanese",
-  //   startTime: genTimeBlock("FRI", 9),
-  //   endTime: genTimeBlock("FRI", 10, 50),
-  //   location: "Language Center",
-  //   extra_descriptions: ["Nakamura"],
-  // },
-  // {
-  //   title: "Club Activity",
-  //   startTime: genTimeBlock("THU", 9),
-  //   endTime: genTimeBlock("THU", 10, 50),
-  //   location: "Activity Center",
-  // },
-  // {
-  //   title: "Club Activity",
-  //   startTime: genTimeBlock("FRI", 13, 30),
-  //   endTime: genTimeBlock("FRI", 14, 50),
-  //   location: "Activity Center",
-  // },
-];
+//   {
+//     title: "Math",
+//     startTime: genTimeBlock("WED", 9),
+//     endTime: genTimeBlock("WED", 10, 50),
+//     location: "Classroom 403",
+//     extra_descriptions: ["Kim", "Lee"],
+//   },
+//   {
+//     title: "Physics",
+//     startTime: genTimeBlock("MON", 11),
+//     endTime: genTimeBlock("MON", 11, 50),
+//     location: "Lab 404",
+//     extra_descriptions: ["Einstein"],
+//   },
+//   {
+//     title: "Computer Science",
+//     startTime: genTimeBlock("WED", 11),
+//     endTime: genTimeBlock("WED", 11, 50),
+//     location: "Lab 404",
+//     extra_descriptions: ["Einstein"],
+//   },
+//   {
+//     title: "Mandarin",
+//     startTime: genTimeBlock("WED", 9),
+//     endTime: genTimeBlock("WED", 10, 50),
+//     location: "Language Center",
+//     extra_descriptions: ["Chen"],
+//   },
+//   {
+//     title: "Japanese",
+//     startTime: genTimeBlock("FRI", 9),
+//     endTime: genTimeBlock("FRI", 10, 50),
+//     location: "Language Center",
+//     extra_descriptions: ["Nakamura"],
+//   },
+//   {
+//     title: "Club Activity",
+//     startTime: genTimeBlock("THU", 9),
+//     endTime: genTimeBlock("THU", 10, 50),
+//     location: "Activity Center",
+//   },
+//   {
+//     title: "Club Activity",
+//     startTime: genTimeBlock("FRI", 13, 30),
+//     endTime: genTimeBlock("FRI", 14, 50),
+//     location: "Activity Center",
+//   },
+ ];
 
 //Write a function to return the current day of the week
 function getDayOfWeek(date) {
@@ -92,34 +93,33 @@ export default class Timetable extends Component {
     this.timetableRef = ref;
   };
 
-  // render() {
-  //   return (
-  //     <SafeAreaView style={{flex: 1}}>
-  //       <View style = {styles.container}>
-  //         <TimeTableView
-  //           scrollViewRef={this.scrollViewRef}
-  //           events={events_data}
-  //           pivotTime={8}
-  //           pivotEndTime={20}
-  //           pivotDate={this.pivotDate}
-  //           locale = 'en'
-  //           formatDateHeader = 'ddd'
-  //           nDays={this.numberOfDays}
-  //           headerStyle = {styles.headerStyle}
-  //         />
-  //       </View>
-  //     </SafeAreaView>
-      
-  //   );
-  // }
-
   render() {
-    return(
-      <View>
-        <Text>Hello World</Text>
-      </View>
-    )
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View style = {styles.container}>
+          <TimeTableView
+            scrollViewRef={this.scrollViewRef}
+            events={events_data}
+            pivotTime={8}
+            pivotEndTime={20}
+            //pivotDate={this.pivotDate}
+            locale = 'en'
+            formatDateHeader = 'ddd'
+            nDays={this.numberOfDays}
+            headerStyle = {styles.headerStyle}
+          />
+        </View>
+      </SafeAreaView>
+      
+    );
   }
+
+  // render() {
+  //   return(
+  //     <View>
+  //     </View>
+  //   )
+  // }
 }
 
 const styles = StyleSheet.create({
