@@ -7,7 +7,7 @@ import { FAB } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from "react-hook-form"
-import Timetable from './SourceFiles/Timetable';
+import {Timetable} from './SourceFiles/Timetable';
 
 var r = require('react-native');
 

@@ -82,7 +82,7 @@ function getCurrentDate(separator=''){
 }
 
 //Make a new empty react component called Timetable
-export default class Timetable extends Component {
+export class Timetable extends Component {
   constructor(props) {
     super(props);
     this.numberOfDays = 1;
