@@ -1,10 +1,10 @@
 // import * as React from 'react';
-import { StyleSheet, View, Alert,SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView, Button, TextInput, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useForm} from "react-hook-form"
+import {useForm, Controller} from "react-hook-form"
 import {useState, React,  Component } from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
 
@@ -47,15 +47,50 @@ function CalendarScreen({ navigation }) {
 }
 
 function AddTimeSlotScreen({ navigation }) {
-  const [Title, setText] = useState('');
-  const [Location, Start, End] = useState('');
-  const {register,handleSubmit} = useForm();
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      firstName: '',
+      lastName: ''
+    }
+  });
   const onSubmit = data => console.log(data);
+
   return (
-    <View style={styles.container}>
-      <form onSubmit={handleSubmit(onSubmit)}> 
-        <input {...register("Title")} placeholder="Title" />
-      </form>
+    <View>
+      <Controller
+        control={control}
+        rules={{
+         required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="firstName"
+      />
+      {errors.firstName && <Text>This is required.</Text>}
+
+      <Controller
+        control={control}
+        rules={{
+         maxLength: 100,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="lastName"
+      />
+
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 }
