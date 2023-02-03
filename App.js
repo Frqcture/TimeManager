@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm, Controller} from "react-hook-form"
 import {useState, React,  Component } from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 var r = require('react-native');
 
@@ -94,12 +96,9 @@ function AddTimeSlotScreen({ navigation }) {
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Start Time"
+          <RNDateTimePicker 
+            mode='time'
+            value={new Date(2030, 10, 20)}
           />
         )}
         name="StartTime"
