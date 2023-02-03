@@ -95,10 +95,12 @@ function AddTimeSlotScreen({ navigation }) {
 
       <Controller
         control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <RNDateTimePicker 
+        render={({ field: { onChange, onBlur, value} }) => (
+          <RNDateTimePicker
+            onChange={onChange}
+            onBlur={onBlur}
             mode='time'
-            value={new Date(2030, 10, 20)}
+            value={new Date()}
           />
         )}
         name="StartTime"
