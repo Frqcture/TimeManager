@@ -3,9 +3,9 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Alert,
+  Text
 } from 'react-native';
-import TimeTableView, { genTimeBlock } from 'react-native-timetable';
+import {TimeTableView, genTimeBlock, genDateBlock } from 'react-native-timetable';
 
 
 const events_data = [
@@ -16,54 +16,54 @@ const events_data = [
     location: "Classroom 403",
     extra_descriptions: ["Kim", "Lee"],
   },
-  {
-    title: "Math",
-    startTime: genTimeBlock("WED", 9),
-    endTime: genTimeBlock("WED", 10, 50),
-    location: "Classroom 403",
-    extra_descriptions: ["Kim", "Lee"],
-  },
-  {
-    title: "Physics",
-    startTime: genTimeBlock("MON", 11),
-    endTime: genTimeBlock("MON", 11, 50),
-    location: "Lab 404",
-    extra_descriptions: ["Einstein"],
-  },
-  {
-    title: "Computer Science",
-    startTime: genTimeBlock("WED", 11),
-    endTime: genTimeBlock("WED", 11, 50),
-    location: "Lab 404",
-    extra_descriptions: ["Einstein"],
-  },
-  {
-    title: "Mandarin",
-    startTime: genTimeBlock("WED", 9),
-    endTime: genTimeBlock("WED", 10, 50),
-    location: "Language Center",
-    extra_descriptions: ["Chen"],
-  },
-  {
-    title: "Japanese",
-    startTime: genTimeBlock("FRI", 9),
-    endTime: genTimeBlock("FRI", 10, 50),
-    location: "Language Center",
-    extra_descriptions: ["Nakamura"],
-  },
-  {
-    title: "Club Activity",
-    startTime: genTimeBlock("THU", 9),
-    endTime: genTimeBlock("THU", 10, 50),
-    location: "Activity Center",
-  },
-  {
-    title: "Club Activity",
-    startTime: genTimeBlock("FRI", 13, 30),
-    endTime: genTimeBlock("FRI", 14, 50),
-    location: "Activity Center",
-  },
-];
+//   {
+//     title: "Math",
+//     startTime: genTimeBlock("WED", 9),
+//     endTime: genTimeBlock("WED", 10, 50),
+//     location: "Classroom 403",
+//     extra_descriptions: ["Kim", "Lee"],
+//   },
+//   {
+//     title: "Physics",
+//     startTime: genTimeBlock("MON", 11),
+//     endTime: genTimeBlock("MON", 11, 50),
+//     location: "Lab 404",
+//     extra_descriptions: ["Einstein"],
+//   },
+//   {
+//     title: "Computer Science",
+//     startTime: genTimeBlock("WED", 11),
+//     endTime: genTimeBlock("WED", 11, 50),
+//     location: "Lab 404",
+//     extra_descriptions: ["Einstein"],
+//   },
+//   {
+//     title: "Mandarin",
+//     startTime: genTimeBlock("WED", 9),
+//     endTime: genTimeBlock("WED", 10, 50),
+//     location: "Language Center",
+//     extra_descriptions: ["Chen"],
+//   },
+//   {
+//     title: "Japanese",
+//     startTime: genTimeBlock("FRI", 9),
+//     endTime: genTimeBlock("FRI", 10, 50),
+//     location: "Language Center",
+//     extra_descriptions: ["Nakamura"],
+//   },
+//   {
+//     title: "Club Activity",
+//     startTime: genTimeBlock("THU", 9),
+//     endTime: genTimeBlock("THU", 10, 50),
+//     location: "Activity Center",
+//   },
+//   {
+//     title: "Club Activity",
+//     startTime: genTimeBlock("FRI", 13, 30),
+//     endTime: genTimeBlock("FRI", 14, 50),
+//     location: "Activity Center",
+//   },
+ ];
 
 //Write a function to return the current day of the week
 function getDayOfWeek(date) {
@@ -82,11 +82,11 @@ function getCurrentDate(separator=''){
 }
 
 //Make a new empty react component called Timetable
-export default class Timetable extends Component {
+export class Timetable extends Component {
   constructor(props) {
     super(props);
     this.numberOfDays = 1;
-    this.pivotDate = genTimeBlock(getDayOfWeek(getCurrentDate('-')), 0);
+    this.pivotDate = genTimeBlock(JSON.stringify(getDayOfWeek(getCurrentDate('-')), 0));
   }
 
   scrollViewRef = (ref) => {
@@ -102,7 +102,7 @@ export default class Timetable extends Component {
             events={events_data}
             pivotTime={8}
             pivotEndTime={20}
-            pivotDate={this.pivotDate}
+            //pivotDate={this.pivotDate}
             locale = 'en'
             formatDateHeader = 'ddd'
             nDays={this.numberOfDays}
@@ -113,6 +113,13 @@ export default class Timetable extends Component {
       
     );
   }
+
+  // render() {
+  //   return(
+  //     <View>
+  //     </View>
+  //   )
+  // }
 }
 
 const styles = StyleSheet.create({

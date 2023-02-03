@@ -1,13 +1,12 @@
 // import * as React from 'react';
-import {useState} from 'react';
-import { StyleSheet, SafeAreaView, View, TextInput, Alert, TouchableHighlight, Text } from 'react-native';
-import Timetable from './SourceFiles/Timetable';
+import { StyleSheet, View, Alert,SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
-import { Button } from '@rneui/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from "react-hook-form"
+import {useState, React,  Component } from 'react';
+import TimeTableView, {genTimeBlock} from 'react-native-timetable';
 
 var r = require('react-native');
 
@@ -61,12 +60,65 @@ function AddTimeSlotScreen({ navigation }) {
   );
 }
 
+export class Timetable extends Component {
+  constructor(props) {
+    super(props);
+    this.numberOfDays = 1;
+    this.pivotDate = genTimeBlock(JSON.stringify(getDayOfWeek(getCurrentDate('-')), 0));
+  }
 
+  scrollViewRef = (ref) => {
+    this.timetableRef = ref;
+  };
 
+  render() {
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View style = {styles.container}>
+          <TimeTableView
+            scrollViewRef={this.scrollViewRef}
+            events={events_data}
+            pivotTime={8}
+            pivotEndTime={20}
+            //pivotDate={this.pivotDate}
+            locale = 'en'
+            formatDateHeader = 'ddd'
+            nDays={this.numberOfDays}
+            headerStyle = {styles.headerStyle}
+          />
+        </View>
+      </SafeAreaView>
+      
+    );
+  }
+
+  // render() {
+  //   return(
+  //     <View>
+  //       <Text>Hello World</Text>
+  //     </View>
+  //   )
+  // }
+}
 
 function onButtonPress() {
   Alert.alert({Title});
   
+}
+
+function getDayOfWeek(date) {
+  var dayOfWeek = new Date(date).getDay();
+  return isNaN(dayOfWeek) ? null :
+    ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][dayOfWeek];
+}
+
+//Function to get the current date
+function getCurrentDate(separator=''){
+  let newDate = new Date()
+  let date = newDate.getDate();
+  let month = newDate.getMonth() + 1;
+  let year = newDate.getFullYear();
+  return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
 }
 
 const storeData = async (value) => {
@@ -115,7 +167,71 @@ var styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'stretch',
     justifyContent: 'center'
-  }
+  },
+  headerStyle: {
+    backgroundColor: '#81E1B8'
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#F8F8F8',
+  },
 });
+
+const events_data = [
+  {
+    title: "Math",
+    startTime: genTimeBlock("MON", 9),
+    endTime: genTimeBlock("MON", 10, 50),
+    location: "Classroom 403",
+    extra_descriptions: ["Kim", "Lee"],
+  },
+  {
+    title: "Math",
+    startTime: genTimeBlock("WED", 9),
+    endTime: genTimeBlock("WED", 10, 50),
+    location: "Classroom 403",
+    extra_descriptions: ["Kim", "Lee"],
+  },
+  {
+    title: "Physics",
+    startTime: genTimeBlock("MON", 11),
+    endTime: genTimeBlock("MON", 11, 50),
+    location: "Lab 404",
+    extra_descriptions: ["Einstein"],
+  },
+  {
+    title: "Computer Science",
+    startTime: genTimeBlock("WED", 11),
+    endTime: genTimeBlock("WED", 11, 50),
+    location: "Lab 404",
+    extra_descriptions: ["Einstein"],
+  },
+  {
+    title: "Mandarin",
+    startTime: genTimeBlock("WED", 9),
+    endTime: genTimeBlock("WED", 10, 50),
+    location: "Language Center",
+    extra_descriptions: ["Chen"],
+  },
+  {
+    title: "Japanese",
+    startTime: genTimeBlock("FRI", 9),
+    endTime: genTimeBlock("FRI", 10, 50),
+    location: "Language Center",
+    extra_descriptions: ["Nakamura"],
+  },
+  {
+    title: "Club Activity",
+    startTime: genTimeBlock("THU", 9),
+    endTime: genTimeBlock("THU", 10, 50),
+    location: "Activity Center",
+  },
+  {
+    title: "Club Activity",
+    startTime: genTimeBlock("FRI", 13, 30),
+    endTime: genTimeBlock("FRI", 14, 50),
+    location: "Activity Center",
+  },
+ ];
 
 export default App;
