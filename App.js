@@ -49,14 +49,16 @@ function CalendarScreen({ navigation }) {
 function AddTimeSlotScreen({ navigation }) {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      firstName: '',
-      lastName: ''
+      Title: '',
+      Location: '',
+      StartTime: '',
+      EndTime: '',
     }
   });
   const onSubmit = data => console.log(data);
 
   return (
-    <View>
+    <View style={styles.Forms}>
       <Controller
         control={control}
         rules={{
@@ -68,26 +70,53 @@ function AddTimeSlotScreen({ navigation }) {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            placeholder="Title"
           />
         )}
-        name="firstName"
+        name="Title"
       />
       {errors.firstName && <Text>This is required.</Text>}
 
       <Controller
         control={control}
-        rules={{
-         maxLength: 100,
-        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            placeholder="Location"
           />
         )}
-        name="lastName"
+        name="Location"
+      />
+
+      <Controller
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Start Time"
+          />
+        )}
+        name="StartTime"
+      />
+
+      <Controller
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="End Time"
+          />
+        )}
+        name="EndTime"
       />
 
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
@@ -175,11 +204,10 @@ const getData = async () => {
 }
 
 var styles = StyleSheet.create({
-  container: {
+  Forms: {
     justifyContent: 'center',
     marginTop: 50,
     padding: 20,
-    backgroundColor: '#ffffff',
   },
   containerText: {
     paddingLeft: 5,
@@ -210,6 +238,13 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F8F8',
   },
+  input: {
+    justifyContent: 'center',
+    padding: 5,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+  }
 });
 
 const events_data = [
