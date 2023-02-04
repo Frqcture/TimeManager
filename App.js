@@ -9,6 +9,7 @@ import {useState, React,  Component } from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-datepicker'
 
 var r = require('react-native');
 
@@ -53,7 +54,7 @@ function AddTimeSlotScreen({ navigation }) {
     defaultValues: {
       Title: '',
       Location: '',
-      StartTime: '',
+      StartTime: Date(),
       EndTime: '',
     }
   });
@@ -77,7 +78,7 @@ function AddTimeSlotScreen({ navigation }) {
         )}
         name="Title"
       />
-      {errors.firstName && <Text>This is required.</Text>}
+      {errors.Title && <Text>This is required.</Text>}
 
       <Controller
         control={control}
@@ -95,13 +96,13 @@ function AddTimeSlotScreen({ navigation }) {
 
       <Controller
         control={control}
-        render={({ field: { onChange, onBlur, value} }) => (
-          <RNDateTimePicker
-            onChange={onChange}
-            onBlur={onBlur}
+        render={({ field }) => (
+          <DatePicker
             mode='time'
-            value={new Date()}
-          />
+            placeholderText='Select date'
+            onChange={(date) => field.onChange(date)}
+            selected={field.value}
+      />
         )}
         name="StartTime"
       />
