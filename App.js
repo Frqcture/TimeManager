@@ -96,13 +96,12 @@ function AddTimeSlotScreen({ navigation }) {
 
       <Controller
         control={control}
-        render={({ field }) => (
-          <DatePicker
+        render={({ onchange, value }) => (
+          <DateTimePicker
             mode='time'
-            placeholderText='Select date'
-            onChange={(date) => field.onChange(date)}
-            selected={field.value}
-      />
+            value={new Date()}
+            onChange={setDate}
+          />
         )}
         name="StartTime"
       />
@@ -125,6 +124,13 @@ function AddTimeSlotScreen({ navigation }) {
     </View>
   );
 }
+
+const setDate = (DateTimePickerEvent, Date) => {
+  const {
+    type,
+    nativeEvent: {timestamp},
+  } = event;
+};
 
 export class Timetable extends Component {
   constructor(props) {
