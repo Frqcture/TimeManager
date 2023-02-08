@@ -78,17 +78,17 @@ function AddTimeSlotScreen({ navigation }) {
     setMode(currentMode);
   };
 
-  const onChangeTitle = (event, selectedTitle) => {
+  const onChangeTitle = (selectedTitle) => {
     let newTitle = selectedTitle;
     setTitle(newTitle);
   };
 
-  const onChangeLocation = (event, selectedLocation) => {
+  const onChangeLocation = (selectedLocation) => {
     let newLocation = selectedLocation;
     setLocation(newLocation);
   };
 
-  const onChangeEndTime = (event, selectedEndTime) => {
+  const onChangeEndTime = (selectedEndTime) => {
     let newEndTime = selectedEndTime;
     setEndTime(newEndTime);
   };
@@ -117,6 +117,15 @@ function AddTimeSlotScreen({ navigation }) {
       style={styles.input}
       onChangeText={onChangeLocation}
       placeholder="Location"
+    />
+
+    <DateTimePicker
+      value={date}
+      mode={'time'}
+      onChange={onTimeChange}
+      display="default"
+      is24Hour={true}
+      testID="dateTimePicker"
     />
     <TextInput
       style={styles.input}
