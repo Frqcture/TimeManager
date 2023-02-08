@@ -1,12 +1,15 @@
 // import * as React from 'react';
-import { StyleSheet, View, Alert,SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView, Button, TextInput, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useForm} from "react-hook-form"
+import {useForm, Controller} from "react-hook-form"
 import {useState, React,  Component } from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-datepicker'
 
 var r = require('react-native');
 
@@ -47,16 +50,132 @@ function CalendarScreen({ navigation }) {
 }
 
 function AddTimeSlotScreen({ navigation }) {
-  const [Title, setText] = useState('');
-  const [Location, Start, End] = useState('');
-  const {register,handleSubmit} = useForm();
-  const onSubmit = data => console.log(data);
-  return (
-    <View style={styles.container}>
-      <form onSubmit={handleSubmit(onSubmit)}> 
-        <input {...register("Title")} placeholder="Title" />
-      </form>
-    </View>
+  const [Title, setTitle] = useState('');
+  const [Location, setLocation] = useState('');
+  const [EndTime, setEndTime] = useState('');
+
+  const [Day, setDay] = useState('');
+
+  const [StartHour, setStartHour] = useState(1);
+  const [StartMinute, setStartMinute] = useState(1);
+
+  const [EndHour, setEndHour] = useState(1);
+  const [EndMinute, setEndMinute] = useState(1);
+
+  const [StartDate, setStartDate] = useState(new Date());
+  const [StartShow, setStartShow] = useState(false);
+
+  const [EndDate, setEndDate] = useState(new Date());
+  const [EndShow, setEndShow] = useState(false);
+
+  const onStartTimeChange = (event, selectedDate) => {
+
+    const currentDate = selectedDate || date;
+    setStartShow(Platform.OS === 'ios');
+    setStartDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+
+    let day = tempDate.getDay();
+    let dayName = 0;
+    if(day == 1){
+      dayName = "MON";
+    } else if(day == 2){
+      dayName = "TUE";
+    } else if(day == 3){
+      dayName = "WED";
+    } else if(day == 4){
+      dayName = "THU";
+    } else if(day == 5){
+      dayName = "FRI";
+    } else if(day == 6){
+      dayName = "SAT";
+    } else if(day == 7){
+      dayName = "SUN";
+    }
+
+    let hour = tempDate.getHours();
+    let mins = tempDate.getMinutes();
+
+    setDay(dayName)
+    setStartHour(hour)
+    setStartMinute(mins)
+  };
+
+  const onEndTimeChange = (event, selectedDate) => {
+
+    const currentDate = selectedDate || date;
+    setEndShow(Platform.OS === 'ios');
+    setEndDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+
+    let hour = tempDate.getHours();
+    let mins = tempDate.getMinutes();
+
+    setEndHour(hour)
+    setEndMinute(mins)
+  };
+
+  const onChangeTitle = (selectedTitle) => {
+    let newTitle = selectedTitle;
+    setTitle(newTitle);
+  };
+
+  const onChangeLocation = (selectedLocation) => {
+    let newLocation = selectedLocation;
+    setLocation(newLocation);
+  };
+
+  const onChangeEndTime = (selectedEndTime) => {
+    let newEndTime = selectedEndTime;
+    setEndTime(newEndTime);
+  };
+
+  const onButtonPress = () => {
+    let data = {
+      Title: Title,
+      Location: Location,
+      StartTime: genTimeBlock(Day, StartHour, StartMinute),
+      EndTime: genTimeBlock(Day, EndHour, EndMinute)
+    };
+
+    console.log(data);
+  };
+
+  return(
+  <View style={styles.Forms}>
+    <TextInput
+      style={styles.input}
+      onChangeText={onChangeTitle}
+      placeholder="Title"
+    />
+    <TextInput
+      style={styles.input}
+      onChangeText={onChangeLocation}
+      placeholder="Location"
+    />
+
+    <RNDateTimePicker
+      value={StartDate}
+      mode={'time'}
+      onChange={onStartTimeChange}
+      display="default"
+      is24Hour={true}
+      testID="startTimePicker"
+    />
+    
+    <RNDateTimePicker
+      value={EndDate}
+      mode={'time'}
+      onChange={onEndTimeChange}
+      display="default"
+      is24Hour={true}
+      testID="endTimePicker"
+    />
+
+    <Button title="Add Time Slot" onPress={onButtonPress} />
+  </View>
   );
 }
 
@@ -140,11 +259,10 @@ const getData = async () => {
 }
 
 var styles = StyleSheet.create({
-  container: {
+  Forms: {
     justifyContent: 'center',
     marginTop: 50,
     padding: 20,
-    backgroundColor: '#ffffff',
   },
   containerText: {
     paddingLeft: 5,
@@ -175,6 +293,13 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F8F8',
   },
+  input: {
+    justifyContent: 'center',
+    padding: 5,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+  }
 });
 
 const events_data = [
