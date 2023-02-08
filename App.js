@@ -50,6 +50,10 @@ function CalendarScreen({ navigation }) {
 }
 
 function AddTimeSlotScreen({ navigation }) {
+  const [Title, setTitle] = useState('');
+  const [Location, setLocation] = useState('');
+  const [EndTime, setEndTime] = useState('');
+
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Empty');
@@ -74,82 +78,132 @@ function AddTimeSlotScreen({ navigation }) {
     setMode(currentMode);
   };
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      Title: '',
-      Location: '',
+  const onChangeTitle = (event, selectedTitle) => {
+    let newTitle = selectedTitle;
+    setTitle(newTitle);
+  };
+
+  const onChangeLocation = (event, selectedLocation) => {
+    let newLocation = selectedLocation;
+    setLocation(newLocation);
+  };
+
+  const onChangeEndTime = (event, selectedEndTime) => {
+    let newEndTime = selectedEndTime;
+    setEndTime(newEndTime);
+  };
+
+  const onButtonPress = () => {
+    let data = {
+      Title: Title,
+      Location: Location,
       StartTime: text,
-      EndTime: '',
-    }
-  });
-  const onSubmit = data => console.log(data);
+      EndTime: EndTime
+    };
 
-  return (
-    <View style={styles.Forms}>
-      <Controller
-        control={control}
-        rules={{
-         required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Title"
-          />
-        )}
-        name="Title"
-      />
-      {errors.Title && <Text>This is required.</Text>}
+    console.log(Title, ", ", Location, ", ", text, ", ", EndTime,", ");
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Location"
-          />
-        )}
-        name="Location"
-      />
+    console.log(data);
+  };
 
-      <Controller
-        control={control}
-        render={() => (
-          <DateTimePicker
-            value={date}
-            mode={'time'}
-            onChange={onTimeChange}
-            display="default"
-            is24Hour={true}
-            testID="dateTimePicker"
-          />
-        )}
-        name="StartTime"
-      />
+  return(
+  <View style={styles.Forms}>
+    <TextInput
+      style={styles.input}
+      onChangeText={onChangeTitle}
+      placeholder="Title"
+    />
+    <TextInput
+      style={styles.input}
+      onChangeText={onChangeLocation}
+      placeholder="Location"
+    />
+    <TextInput
+      style={styles.input}
+      onChangeText={onChangeEndTime}
+      placeholder="End Time"
+    />
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="End Time"
-          />
-        )}
-        name="EndTime"
-      />
-
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>
+    <Button title="Add Time Slot" onPress={onButtonPress} />
+  </View>
   );
+
+  // const { control, handleSubmit, formState: { errors } } = useForm({
+  //   defaultValues: {
+  //     Title: '',
+  //     Location: '',
+  //     StartTime: text,
+  //     EndTime: '',
+  //   }
+  // });
+  // const onSubmit = data => console.log(data);
+
+  // return (
+  //   <View style={styles.Forms}>
+  //     <Controller
+  //       control={control}
+  //       rules={{
+  //        required: true,
+  //       }}
+  //       render={({ field: { onChange, onBlur, value } }) => (
+  //         <TextInput
+  //           style={styles.input}
+  //           onBlur={onBlur}
+  //           onChangeText={onChange}
+  //           value={value}
+  //           placeholder="Title"
+  //         />
+  //       )}
+  //       name="Title"
+  //     />
+  //     {errors.Title && <Text>This is required.</Text>}
+
+  //     <Controller
+  //       control={control}
+  //       render={({ field: { onChange, onBlur, value } }) => (
+  //         <TextInput
+  //           style={styles.input}
+  //           onBlur={onBlur}
+  //           onChangeText={onChange}
+  //           value={value}
+  //           placeholder="Location"
+  //         />
+  //       )}
+  //       name="Location"
+  //     />
+
+  //     <Controller
+  //       control={control}
+  //       render={() => (
+  //         <DateTimePicker
+  //           value={date}
+  //           mode={'time'}
+  //           onChange={onTimeChange}
+  //           display="default"
+  //           is24Hour={true}
+  //           testID="dateTimePicker"
+  //         />
+  //       )}
+  //       name="StartTime"
+  //     />
+
+  //     <Controller
+  //       control={control}
+  //       render={({ field: { onChange, onBlur, value } }) => (
+  //         <TextInput
+  //           style={styles.input}
+  //           onBlur={onBlur}
+  //           onChangeText={onChange}
+  //           value={value}
+  //           placeholder="End Time"
+  //         />
+  //       )}
+  //       name="EndTime"
+  //     />
+
+  //     <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+  //   </View>
+  //);
 }
 
 export class Timetable extends Component {
