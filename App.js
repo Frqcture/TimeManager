@@ -54,28 +54,67 @@ function AddTimeSlotScreen({ navigation }) {
   const [Location, setLocation] = useState('');
   const [EndTime, setEndTime] = useState('');
 
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-  const [text, setText] = useState('Empty');
+  const [Day, setDay] = useState('');
 
-  const onTimeChange = (event, selectedDate) => {
-    console.log('OnTimeChange activated');
+  const [StartHour, setStartHour] = useState(1);
+  const [StartMinute, setStartMinute] = useState(1);
+
+  const [EndHour, setEndHour] = useState(1);
+  const [EndMinute, setEndMinute] = useState(1);
+
+  const [StartDate, setStartDate] = useState(new Date());
+  const [StartShow, setStartShow] = useState(false);
+
+  const [EndDate, setEndDate] = useState(new Date());
+  const [EndShow, setEndShow] = useState(false);
+
+  const onStartTimeChange = (event, selectedDate) => {
 
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    setStartShow(Platform.OS === 'ios');
+    setStartDate(currentDate);
 
     let tempDate = new Date(currentDate);
-    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-    let fTime = "Hours " + tempDate.getHours() + ", Minutes " + tempDate.getMinutes();
-    setText(fDate + '\n' + fTime);
 
-    console.log(text);
+    let day = tempDate.getDay();
+    let dayName = 0;
+    if(day == 1){
+      dayName = "MON";
+    } else if(day == 2){
+      dayName = "TUE";
+    } else if(day == 3){
+      dayName = "WED";
+    } else if(day == 4){
+      dayName = "THU";
+    } else if(day == 5){
+      dayName = "FRI";
+    } else if(day == 6){
+      dayName = "SAT";
+    } else if(day == 7){
+      dayName = "SUN";
+    }
+
+    let hour = tempDate.getHours();
+    let mins = tempDate.getMinutes();
+
+    setDay(dayName)
+    setStartHour(hour)
+    setStartMinute(mins)
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+  const onEndTimeChange = (event, selectedDate) => {
+
+    const currentDate = selectedDate || date;
+    setEndShow(Platform.OS === 'ios');
+    setEndDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+
+    let hour = tempDate.getHours();
+    let mins = tempDate.getMinutes();
+
+    setEndHour(hour)
+    setEndMinute(mins)
   };
 
   const onChangeTitle = (selectedTitle) => {
@@ -97,11 +136,9 @@ function AddTimeSlotScreen({ navigation }) {
     let data = {
       Title: Title,
       Location: Location,
-      StartTime: text,
-      EndTime: EndTime
+      StartTime: genTimeBlock(Day, StartHour, StartMinute),
+      EndTime: genTimeBlock(Day, EndHour, EndMinute)
     };
-
-    console.log(Title, ", ", Location, ", ", text, ", ", EndTime,", ");
 
     console.log(data);
   };
@@ -119,100 +156,27 @@ function AddTimeSlotScreen({ navigation }) {
       placeholder="Location"
     />
 
-    <DateTimePicker
-      value={date}
+    <RNDateTimePicker
+      value={StartDate}
       mode={'time'}
-      onChange={onTimeChange}
+      onChange={onStartTimeChange}
       display="default"
       is24Hour={true}
-      testID="dateTimePicker"
+      testID="startTimePicker"
     />
-    <TextInput
-      style={styles.input}
-      onChangeText={onChangeEndTime}
-      placeholder="End Time"
+    
+    <RNDateTimePicker
+      value={EndDate}
+      mode={'time'}
+      onChange={onEndTimeChange}
+      display="default"
+      is24Hour={true}
+      testID="endTimePicker"
     />
 
     <Button title="Add Time Slot" onPress={onButtonPress} />
   </View>
   );
-
-  // const { control, handleSubmit, formState: { errors } } = useForm({
-  //   defaultValues: {
-  //     Title: '',
-  //     Location: '',
-  //     StartTime: text,
-  //     EndTime: '',
-  //   }
-  // });
-  // const onSubmit = data => console.log(data);
-
-  // return (
-  //   <View style={styles.Forms}>
-  //     <Controller
-  //       control={control}
-  //       rules={{
-  //        required: true,
-  //       }}
-  //       render={({ field: { onChange, onBlur, value } }) => (
-  //         <TextInput
-  //           style={styles.input}
-  //           onBlur={onBlur}
-  //           onChangeText={onChange}
-  //           value={value}
-  //           placeholder="Title"
-  //         />
-  //       )}
-  //       name="Title"
-  //     />
-  //     {errors.Title && <Text>This is required.</Text>}
-
-  //     <Controller
-  //       control={control}
-  //       render={({ field: { onChange, onBlur, value } }) => (
-  //         <TextInput
-  //           style={styles.input}
-  //           onBlur={onBlur}
-  //           onChangeText={onChange}
-  //           value={value}
-  //           placeholder="Location"
-  //         />
-  //       )}
-  //       name="Location"
-  //     />
-
-  //     <Controller
-  //       control={control}
-  //       render={() => (
-  //         <DateTimePicker
-  //           value={date}
-  //           mode={'time'}
-  //           onChange={onTimeChange}
-  //           display="default"
-  //           is24Hour={true}
-  //           testID="dateTimePicker"
-  //         />
-  //       )}
-  //       name="StartTime"
-  //     />
-
-  //     <Controller
-  //       control={control}
-  //       render={({ field: { onChange, onBlur, value } }) => (
-  //         <TextInput
-  //           style={styles.input}
-  //           onBlur={onBlur}
-  //           onChangeText={onChange}
-  //           value={value}
-  //           placeholder="End Time"
-  //         />
-  //       )}
-  //       name="EndTime"
-  //     />
-
-  //     <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-  //   </View>
-  //);
 }
 
 export class Timetable extends Component {
