@@ -50,11 +50,35 @@ function CalendarScreen({ navigation }) {
 }
 
 function AddTimeSlotScreen({ navigation }) {
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('Empty');
+
+  const onTimeChange = (event, selectedDate) => {
+    console.log('OnTimeChange activated');
+
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+    let fTime = "Hours " + tempDate.getHours() + ", Minutes " + tempDate.getMinutes();
+    setText(fDate + '\n' + fTime);
+
+    console.log(text);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       Title: '',
       Location: '',
-      StartTime: Date(),
+      StartTime: text,
       EndTime: '',
     }
   });
@@ -96,11 +120,14 @@ function AddTimeSlotScreen({ navigation }) {
 
       <Controller
         control={control}
-        render={({ onchange, value }) => (
+        render={() => (
           <DateTimePicker
-            mode='time'
-            value={new Date()}
-            onChange={setDate}
+            value={date}
+            mode={'time'}
+            onChange={onTimeChange}
+            display="default"
+            is24Hour={true}
+            testID="dateTimePicker"
           />
         )}
         name="StartTime"
@@ -124,13 +151,6 @@ function AddTimeSlotScreen({ navigation }) {
     </View>
   );
 }
-
-const setDate = (DateTimePickerEvent, Date) => {
-  const {
-    type,
-    nativeEvent: {timestamp},
-  } = event;
-};
 
 export class Timetable extends Component {
   constructor(props) {
