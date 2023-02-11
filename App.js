@@ -4,18 +4,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useForm, Controller} from "react-hook-form"
 import {useState, React,  Component } from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import DatePicker from 'react-native-datepicker'
 
 var r = require('react-native');
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -134,13 +132,13 @@ function AddTimeSlotScreen({ navigation }) {
 
   const onButtonPress = () => {
     let data = {
-      Title: Title,
-      Location: Location,
-      StartTime: genTimeBlock(Day, StartHour, StartMinute),
-      EndTime: genTimeBlock(Day, EndHour, EndMinute)
+      title: Title,
+      startTime: genTimeBlock(Day, StartHour, StartMinute),
+      endTime: genTimeBlock(Day, EndHour, EndMinute),
+      location: Location,
     };
 
-    console.log(data);
+    events_data.push(data);
   };
 
   return(
@@ -179,16 +177,24 @@ function AddTimeSlotScreen({ navigation }) {
   );
 }
 
-export class Timetable extends Component {
+class Timetable extends Component {
   constructor(props) {
     super(props);
-    this.numberOfDays = 1;
+    this.numberOfDays = 5;
     this.pivotDate = genTimeBlock(JSON.stringify(getDayOfWeek(getCurrentDate('-')), 0));
   }
 
   scrollViewRef = (ref) => {
     this.timetableRef = ref;
   };
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        data: 'updated data',
+      });
+    }, 1000);
+  }
 
   render() {
     return (
@@ -204,20 +210,13 @@ export class Timetable extends Component {
             formatDateHeader = 'ddd'
             nDays={this.numberOfDays}
             headerStyle = {styles.headerStyle}
+            onEventPress = {() => {console.log(events_data)}}
           />
         </View>
       </SafeAreaView>
       
     );
   }
-
-  // render() {
-  //   return(
-  //     <View>
-  //       <Text>Hello World</Text>
-  //     </View>
-  //   )
-  // }
 }
 
 function onButtonPress() {
@@ -256,6 +255,16 @@ const getData = async () => {
   } catch(e) {
     // error reading value
   }
+}
+
+removeValue = async () => {
+  try {
+    await AsyncStorage.removeItem('@MyApp_key')
+  } catch(e) {
+    // remove error
+  }
+
+  console.log('Done.')
 }
 
 var styles = StyleSheet.create({
@@ -302,7 +311,7 @@ var styles = StyleSheet.create({
   }
 });
 
-const events_data = [
+let events_data = [
   {
     title: "Math",
     startTime: genTimeBlock("MON", 9),
@@ -357,6 +366,8 @@ const events_data = [
     endTime: genTimeBlock("FRI", 14, 50),
     location: "Activity Center",
   },
- ];
+ ]; 
+
+//let events_data = [];
 
 export default App;
