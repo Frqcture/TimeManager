@@ -1,21 +1,19 @@
-// import * as React from 'react';
 import { StyleSheet, View, Alert, SafeAreaView, Button, TextInput, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FAB } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useForm, Controller} from "react-hook-form"
-import {useState, React,  Component } from 'react';
+import React, {useState, useCallback} from 'react';
 import TimeTableView, {genTimeBlock} from 'react-native-timetable';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import DatePicker from 'react-native-datepicker'
+import { isSearchBarAvailableForCurrentPlatform } from 'react-native-screens';
 
 var r = require('react-native');
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -41,6 +39,18 @@ function FabButton({ nav }) {
 }
 
 function CalendarScreen({ navigation }) {
+  const [data, setData] = useState('initial data');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setData('updated data');
+
+      return () => {
+        //console.log('You left me!!')
+      };
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <Timetable />
@@ -134,13 +144,14 @@ function AddTimeSlotScreen({ navigation }) {
 
   const onButtonPress = () => {
     let data = {
-      Title: Title,
-      Location: Location,
-      StartTime: genTimeBlock(Day, StartHour, StartMinute),
-      EndTime: genTimeBlock(Day, EndHour, EndMinute)
+      title: Title,
+      startTime: genTimeBlock(Day, StartHour, StartMinute),
+      endTime: genTimeBlock(Day, EndHour, EndMinute),
+      location: Location,
     };
 
-    console.log(data);
+    events_data.push(data);
+    events_data = {...events_data, data};
   };
 
   return(
@@ -179,50 +190,60 @@ function AddTimeSlotScreen({ navigation }) {
   );
 }
 
-export class Timetable extends Component {
-  constructor(props) {
-    super(props);
-    this.numberOfDays = 1;
-    this.pivotDate = genTimeBlock(JSON.stringify(getDayOfWeek(getCurrentDate('-')), 0));
-  }
+const Timetable = () => {
+  const [events, setEvents] = useState(events_data);
 
-  scrollViewRef = (ref) => {
-    this.timetableRef = ref;
+  const updateEvents = () => {
+    // setEvents([
+    //   ...events,
+    //   {
+    //     startTime: genTimeBlock("WED", 14, 0),
+    //     endTime: genTimeBlock("WED", 15, 0),
+    //     title: 'Event 3',
+    //     location: 'Wednesday'
+    //   }
+    // ]);
+    setEvents(events_data);
   };
 
-  render() {
-    return (
-      <SafeAreaView style={{flex: 1}}>
+  const [tableData, setTableData] = useState(events_data);
+  const [data, setData] = useState('initial data');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      //setTableData(events_data);
+      updateEvents();
+      //setEvents(events_data);
+      console.log('Accessed timetable!')
+
+      return () => {
+        //console.log('You left me!!')
+      };
+    }, [])
+  );
+
+  return (
+    <SafeAreaView style={{flex: 1}}>
         <View style = {styles.container}>
           <TimeTableView
-            scrollViewRef={this.scrollViewRef}
-            events={events_data}
+            //scrollViewRef={this.scrollViewRef}
+            events={events}
             pivotTime={8}
             pivotEndTime={20}
             //pivotDate={this.pivotDate}
             locale = 'en'
             formatDateHeader = 'ddd'
-            nDays={this.numberOfDays}
+            nDays={5}
             headerStyle = {styles.headerStyle}
+            onEventPress = {() => {console.log(events_data)}}
           />
         </View>
       </SafeAreaView>
-      
-    );
-  }
-
-  // render() {
-  //   return(
-  //     <View>
-  //       <Text>Hello World</Text>
-  //     </View>
-  //   )
-  // }
+  );
 }
 
 function onButtonPress() {
   Alert.alert({Title});
-  
 }
 
 function getDayOfWeek(date) {
@@ -256,6 +277,16 @@ const getData = async () => {
   } catch(e) {
     // error reading value
   }
+}
+
+removeValue = async () => {
+  try {
+    await AsyncStorage.removeItem('@MyApp_key')
+  } catch(e) {
+    // remove error
+  }
+
+  console.log('Done.')
 }
 
 var styles = StyleSheet.create({
@@ -302,61 +333,63 @@ var styles = StyleSheet.create({
   }
 });
 
-const events_data = [
-  {
-    title: "Math",
-    startTime: genTimeBlock("MON", 9),
-    endTime: genTimeBlock("MON", 10, 50),
-    location: "Classroom 403",
-    extra_descriptions: ["Kim", "Lee"],
-  },
-  {
-    title: "Math",
-    startTime: genTimeBlock("WED", 9),
-    endTime: genTimeBlock("WED", 10, 50),
-    location: "Classroom 403",
-    extra_descriptions: ["Kim", "Lee"],
-  },
-  {
-    title: "Physics",
-    startTime: genTimeBlock("MON", 11),
-    endTime: genTimeBlock("MON", 11, 50),
-    location: "Lab 404",
-    extra_descriptions: ["Einstein"],
-  },
-  {
-    title: "Computer Science",
-    startTime: genTimeBlock("WED", 11),
-    endTime: genTimeBlock("WED", 11, 50),
-    location: "Lab 404",
-    extra_descriptions: ["Einstein"],
-  },
-  {
-    title: "Mandarin",
-    startTime: genTimeBlock("WED", 9),
-    endTime: genTimeBlock("WED", 10, 50),
-    location: "Language Center",
-    extra_descriptions: ["Chen"],
-  },
-  {
-    title: "Japanese",
-    startTime: genTimeBlock("FRI", 9),
-    endTime: genTimeBlock("FRI", 10, 50),
-    location: "Language Center",
-    extra_descriptions: ["Nakamura"],
-  },
-  {
-    title: "Club Activity",
-    startTime: genTimeBlock("THU", 9),
-    endTime: genTimeBlock("THU", 10, 50),
-    location: "Activity Center",
-  },
+let events_data = [
+  // {
+  //   title: "Math",
+  //   startTime: genTimeBlock("MON", 9),
+  //   endTime: genTimeBlock("MON", 10, 50),
+  //   location: "Classroom 403",
+  //   extra_descriptions: ["Kim", "Lee"],
+  // },
+  // {
+  //   title: "Math",
+  //   startTime: genTimeBlock("WED", 9),
+  //   endTime: genTimeBlock("WED", 10, 50),
+  //   location: "Classroom 403",
+  //   extra_descriptions: ["Kim", "Lee"],
+  // },
+  // {
+  //   title: "Physics",
+  //   startTime: genTimeBlock("MON", 11),
+  //   endTime: genTimeBlock("MON", 11, 50),
+  //   location: "Lab 404",
+  //   extra_descriptions: ["Einstein"],
+  // },
+  // {
+  //   title: "Computer Science",
+  //   startTime: genTimeBlock("WED", 11),
+  //   endTime: genTimeBlock("WED", 11, 50),
+  //   location: "Lab 404",
+  //   extra_descriptions: ["Einstein"],
+  // },
+  // {
+  //   title: "Mandarin",
+  //   startTime: genTimeBlock("WED", 9),
+  //   endTime: genTimeBlock("WED", 10, 50),
+  //   location: "Language Center",
+  //   extra_descriptions: ["Chen"],
+  // },
+  // {
+  //   title: "Japanese",
+  //   startTime: genTimeBlock("FRI", 9),
+  //   endTime: genTimeBlock("FRI", 10, 50),
+  //   location: "Language Center",
+  //   extra_descriptions: ["Nakamura"],
+  // },
+  // {
+  //   title: "Club Activity",
+  //   startTime: genTimeBlock("THU", 9),
+  //   endTime: genTimeBlock("THU", 10, 50),
+  //   location: "Activity Center",
+  // },
   {
     title: "Club Activity",
     startTime: genTimeBlock("FRI", 13, 30),
     endTime: genTimeBlock("FRI", 14, 50),
     location: "Activity Center",
   },
- ];
+ ]; 
+
+//let events_data = [];
 
 export default App;
